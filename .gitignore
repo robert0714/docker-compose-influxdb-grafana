@@ -1,0 +1,25 @@
+# Ignore everything in this directory
+target
+mvnw
+mvnw.cmd
+.vscode
+.classpath
+.settings
+.project
+*.i??
+.idea
+.metadata
+.recommenders
+.mvn
+.DS_Store
+.gradle
+build
+**/.vagrant/
+**/*.log
+**/.factorypath
+.vagrant/
+*.log
+src
+*.tar
+oracledb-19.3/oracle_data
+*.tar.gz
