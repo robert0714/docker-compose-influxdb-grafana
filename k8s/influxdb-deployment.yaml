@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-influxdb
+  labels:
+    app: monitoring-influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-influxdb
+  template:
+    metadata:
+      labels:
+        app: monitoring-influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb:1.8
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8086
+        volumeMounts:
+        - mountPath: /var/lib/influxdb
+          name: influxdb-storage
+      volumes:
+      - name: influxdb-storage
+        emptyDir: {}
+      env:
+      - name: TZ
+        value: 'Asia/Taipei'
+      - name: INFLUXDB_DB
+        value: 'myk6db'
+      - name: INFLUXDB_ADMIN_USER
+        value: 'admin'
+      - name: INFLUXDB_ADMIN_PASSWORD
+        value: 'admin'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    kubernetes.io/cluster-service: 'true'
+    kubernetes.io/name: monitoring-influxdb
+  name: monitoring-influxdb 
+spec:
+  ports:
+  - port: 8086
+    protocol: TCP
+    targetPort: 8086
+  selector:
+    app: monitoring-influxdb
+  sessionAffinity: None
+  type: ClusterIP
